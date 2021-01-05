@@ -51,17 +51,14 @@ describe("Workflow API", () => {
       params
     );
     expect(response.status).toEqual(200);
+
+    // Renaming state in workflow
+    params = {
+      action: "rename state",
+      state: "state 3",
+      newState: "Validé",
+    };
+    response = await axios.post(url + "/workflow/" + workflow._id, params);
+    expect(response.status).toEqual(200);
   });
-  //   it("should respond OK to rename status in workflow", async () => {
-  //     const params = {
-  //       action: "rename state",
-  //       state: "state 3",
-  //       newState: "Validé",
-  //     };
-  //     const response = await axios.post(
-  //       url + "/workflow/5ff4a12d124d50390002e8b0",
-  //       params
-  //     );
-  //     expect(response.status).toEqual(200);
-  //   });
 });
