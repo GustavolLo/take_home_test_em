@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+var cors = require("cors");
 
 const app = express();
 const port = 3000;
@@ -12,6 +13,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Workflow API running!");
