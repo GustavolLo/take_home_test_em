@@ -27,4 +27,6 @@ app.get("/workflow", controller.getWorkflows);
 
 app.post("/workflow", controller.createWorkflow);
 
-app.post("/workflow/add", controller.addEntity);
+app.post("/workflow/:id/add", controller.addEntity);
+
+//app.post("/workflow/:id/entity/:id", controller.updateEntity);

@@ -18,14 +18,16 @@ describe("Workflow API", () => {
   });
   it("should respond OK to add entity endpoint", async () => {
     const params = {
-      workflowName: "workflow 1",
       entity: {
-        name: "project 1",
+        name: "project 3",
         type: "project",
         status: "status 1",
       },
     };
-    const response = await axios.post(url + "/workflow/add", params);
+    const response = await axios.post(
+      url + "/workflow/5ff4778a90a50057d8ca5c6c/add",
+      params
+    );
     expect(response.status).toEqual(200);
   });
 });

@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectID } = require("mongodb");
 
 const url = "mongodb://localhost:27017";
 const dbName = "workflowdb";
@@ -36,14 +36,16 @@ module.exports = {
     })();
   },
   addEntity(req, res) {
-    const { workflowName, entity } = req.body;
+    const { id } = req.params;
+    const { entity } = req.body;
     (async function query() {
       let client;
       try {
         client = await MongoClient.connect(url);
         const db = await client.db(dbName);
         const col = await db.collection("workflows");
-        const workflow = await col.findOne({ name: workflowName });
+        const workflow = await col.findOne({ _id: new ObjectID(id) });
+        console.log(workflow);
         if (workflow) {
           const entities = [...workflow.entities, entity];
           await col.updateOne(
