@@ -35,4 +35,27 @@ module.exports = {
       client.close();
     })();
   },
+  addEntity(req, res) {
+    const { workflowName, entity } = req.body;
+    (async function query() {
+      let client;
+      try {
+        client = await MongoClient.connect(url);
+        const db = await client.db(dbName);
+        const col = await db.collection("workflows");
+        const workflow = await col.findOne({ name: workflowName });
+        if (workflow) {
+          const entities = [...workflow.entities, entity];
+          await col.updateOne(
+            { name: workflowName },
+            { $set: { entities: entities } }
+          );
+          res.send("Request sent to workflowdb.");
+        }
+      } catch (error) {
+        res.send(error);
+      }
+      client.close();
+    })();
+  },
 };

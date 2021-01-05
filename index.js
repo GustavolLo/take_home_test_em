@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
 
-const controller = require("./workflowController");
+const controller = require("./controller");
 
 app.use(
   bodyParser.urlencoded({
@@ -24,3 +24,5 @@ app.listen(port, () => {
 app.get("/workflow", controller.getWorkflows);
 
 app.post("/workflow", controller.createWorkflow);
+
+app.post("/workflow/add", controller.addEntity);
