@@ -29,4 +29,4 @@ app.post("/workflow", controller.createWorkflow);
 
 app.post("/workflow/:id/add", controller.addEntity);
 
-// app.post("/workflow/:id/entity/:id", controller.updateEntity);
+app.post("/workflow/:id/entity/:entity", controller.updateEntity);
