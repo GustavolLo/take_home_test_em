@@ -1,5 +1,5 @@
 const { MongoClient, ObjectID } = require("mongodb");
-const { v1: uuid } = require("uuid");
+const { v4: uuid } = require("uuid");
 
 const url = "mongodb://localhost:27017";
 const dbName = "workflowdb";
@@ -93,10 +93,44 @@ module.exports = {
               }
               return element;
             });
-            console.log(entities);
             await col.updateOne(
               { _id: new ObjectID(id) },
               { $set: { entities: entities } }
+            );
+            res.send("Request sent to workflowdb.");
+          }
+        } catch (error) {
+          res.send(error);
+        }
+        client.close();
+      })();
+    }
+  },
+  renameState(req, res) {
+    const { action } = req.body;
+    if (action === "rename state") {
+      const { state, newState } = req.body;
+      const { id } = req.params;
+      (async function query() {
+        let client;
+        try {
+          client = await MongoClient.connect(url);
+          const db = await client.db(dbName);
+          const col = await db.collection("workflows");
+          const workflow = await col.findOne({ _id: new ObjectID(id) });
+          if (workflow) {
+            const states = workflow.states.map((element) => {
+              if (element === state) return newState;
+              else return element;
+            });
+            const entities = workflow.entities.map((element) => {
+              if (element.status === state) element.status = newState;
+              return element;
+            });
+            console.log(entities);
+            await col.updateOne(
+              { _id: new ObjectID(id) },
+              { $set: { entities: entities, states: states } }
             );
             res.send("Request sent to workflowdb.");
           }
