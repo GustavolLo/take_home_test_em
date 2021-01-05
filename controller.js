@@ -1,4 +1,5 @@
 const { MongoClient, ObjectID } = require("mongodb");
+const { v4: uuid } = require("uuid");
 
 const url = "mongodb://localhost:27017";
 const dbName = "workflowdb";
@@ -45,11 +46,11 @@ module.exports = {
         const db = await client.db(dbName);
         const col = await db.collection("workflows");
         const workflow = await col.findOne({ _id: new ObjectID(id) });
-        console.log(workflow);
         if (workflow) {
-          const entities = [...workflow.entities, entity];
+          const entities = [...workflow.entities, { ...entity, id: uuid() }];
+          console.log(entities);
           await col.updateOne(
-            { name: workflowName },
+            { _id: new ObjectID(id) },
             { $set: { entities: entities } }
           );
           res.send("Request sent to workflowdb.");
